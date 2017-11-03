@@ -15,7 +15,13 @@ import sistema.arquivos.GestorArquivos;
 public class Sistema {
     public static void main(String[] args){
         int opt, id;
-        String servico;
+        String servico, nome;
+        Cliente c;
+        Filme f;
+        Serie s;
+        
+        GestorArquivos.deletarCliente(122);
+        GestorArquivos.deletarFilme("A fuga");
         
         while(true){
             opt = Interface.showMenu(Interface.opt_MenuRaiz);
@@ -33,7 +39,9 @@ public class Sistema {
                         case 1:
                             break;
                         case 2:
-                            GestorArquivos.registrarCliente(new Cliente(Interface.getString(), Interface.getId()));
+                            nome = Interface.getString();
+                            id = Interface.getId();
+                            GestorArquivos.registrarCliente(new Cliente(nome, id));
                             //cadastrar cliente
                             break;
                         case 3:
@@ -46,10 +54,29 @@ public class Sistema {
                             break;
                         case 5:
                             id = Interface.getId();
+                            c = GestorArquivos.buscarCliente(Integer.toString(id));
+                            if(c != null){
+                                //encontrou
+                            }    
                             //Consultar cliente
                             break;
                         case 6:
-                            servico = Interface.getString();
+                            switch(Interface.showMenu(Interface.OPT_T_SERVICO)){
+                                case 1:
+                                    nome = Interface.getString(); 
+                                    f = GestorArquivos.buscarFilme(nome);
+                                    if(f != null){
+                                        //encontrou
+                                    }
+                                    break;
+                                case 2:
+                                    nome = Interface.getString();
+                                    s = GestorArquivos.buscarSerie(nome);
+                                    if(s != null){
+                                        //encontrou
+                                    }
+                                    break;
+                            }
                             //Alugar serviço
                             break;
                         case 7:

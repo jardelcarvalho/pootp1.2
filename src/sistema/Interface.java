@@ -15,6 +15,7 @@ class Interface {
     public static final String[] opt_MenuRaiz = {"Sair", "Cliente", "Serviço"};
     public static final String[] opt_Cliente = {"Sair", "Cadastrar", "Remover", "Alterar", "Consultar", "Alugar ", "Devolver"};
     public static final String[] opt_Servico = {"Sair", "Cadastrar", "Remover", "Alterar", "Consultar"};
+    public static final String[] OPT_T_SERVICO = {"Filme", "Serie"};
     private static final Scanner sc = new Scanner(System.in);
     
     public static int showMenu(String[] menu){
