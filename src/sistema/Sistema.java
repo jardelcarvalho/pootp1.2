@@ -20,8 +20,7 @@ public class Sistema {
         Filme f;
         Serie s;
         
-        GestorArquivos.deletarCliente(122);
-        GestorArquivos.deletarFilme("A fuga");
+        GestorArquivos.registrarFilme(new Filme("O filme", "Guerra", 18, 124, 1));
         
         while(true){
             opt = Interface.showMenu(Interface.opt_MenuRaiz);

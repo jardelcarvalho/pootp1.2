@@ -14,9 +14,9 @@ public class Serie extends Atracao implements Formato{
     private int numEp;/*número de episódios*/
     private int numTemp;/*número de temporadas*/
     
-    public Serie(String titulo, String genero, int classIndicativa, int numEp, int numTemp){
+    public Serie(String titulo, String genero, int classIndicativa, int numEp, int numTemp, int quantidade){
     
-        super(titulo, genero, classIndicativa);
+        super(titulo, genero, classIndicativa, quantidade);
         this.numEp = numEp;
         this.numTemp = numTemp;
         
@@ -50,7 +50,7 @@ public class Serie extends Atracao implements Formato{
     
     @Override 
     public String formatoArquivo(){
-        return super.formatoArquivo() + ',' + numEp + ',' + numTemp;
+        return super.formatoArquivo() + '.' + numEp + '.' + numTemp;
     }
     
 }

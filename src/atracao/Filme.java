@@ -14,9 +14,9 @@ public class Filme extends Atracao implements Formato{
     
     private int tempDura;/*tempo de duração*/
     
-    public Filme(String titulo, String genero, int classIndicativa, int tempDura){
+    public Filme(String titulo, String genero, int classIndicativa, int tempDura, int quantidade){
     
-        super(titulo, genero, classIndicativa);
+        super(titulo, genero, classIndicativa, quantidade);
         this.tempDura = tempDura;
         
     }
@@ -43,7 +43,7 @@ public class Filme extends Atracao implements Formato{
     
     @Override
     public String formatoArquivo(){
-        return super.formatoArquivo() + ',' + tempDura;
+        return super.formatoArquivo() + '.' + tempDura;
     }
     
 }

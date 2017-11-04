@@ -7,6 +7,7 @@ package sistema.arquivos;
 import cliente.Cliente;
 import atracao.Filme;
 import atracao.Serie;
+import servicos.Locacao;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -22,6 +23,7 @@ public class GestorArquivos {
     private static final String CAMINHO_CLIENTES = CAMINHO_RAIZ + "/clientes.txt";
     private static final String CAMINHO_FILMES = CAMINHO_RAIZ + "/filmes.txt";
     private static final String CAMINHO_SERIES = CAMINHO_RAIZ + "/series.txt";
+    private static final String CAMINHO_LOCACOES = CAMINHO_RAIZ + "/locacoes.txt";
     
     private static boolean deletarLinha(String identificador, String path, String regex){
         File file = new File(path);
@@ -131,58 +133,90 @@ public class GestorArquivos {
         }
     }
     
-    private static boolean verificaRepetido(String item, String path){
-        return false;
+    private static boolean jaExiste(String item, String path){
+        boolean existe = false;
+        try{
+            FileReader f = new FileReader(path);
+            BufferedReader h = new BufferedReader(f);
+            String linha = "";
+            while(linha != null){
+                if(item.compareTo(linha) == 0){
+                    existe = true;
+                    break;
+                }
+                linha = h.readLine();
+            }
+            f.close();
+            h.close();
+        }catch(IOException e){
+            //System.out.println("Erro ao ler " + path);
+        }
+        return existe;
     }
     
-    public static void registrarCliente(Cliente c){
-        if(verificaRepetido(c.formatoArquivo(), CAMINHO_CLIENTES)){
-            escrever(c.formatoArquivo(), CAMINHO_CLIENTES);
-            return;
-        }
-        System.out.println("Este cliente já existe");
-    }
+    
     
     public static Cliente buscarCliente(String identificador){
         String[] dados = buscarLinha(identificador, CAMINHO_CLIENTES, "\\.");
         return dados != null ? new Cliente(dados[0], Integer.parseInt(dados[1])) : null;
     }
     
-    public static void registrarFilme(Filme f){
-        if(verificaRepetido(f.formatoArquivo(), CAMINHO_FILMES)){
-            escrever(f.formatoArquivo(), CAMINHO_FILMES);
-            return;
-        }
-        System.out.println("Este filme já existe");
-    }
-    
     public static Filme buscarFilme(String nome){
-        String[] dados = buscarLinha(nome, CAMINHO_FILMES, "\\.");
+        String[] dados = buscarLinha(nome, CAMINHO_FILMES, "\\ ");
         if(dados != null){
-            String[] splited = dados[1].split("\\,");
-            if(splited.length != 3) return null;
-            return new Filme(dados[0], splited[0], Integer.parseInt(splited[1]), Integer.parseInt(splited[2]));
+            return new Filme(dados[0], dados[1], Integer.parseInt(dados[2]), Integer.parseInt(dados[3]), Integer.parseInt(dados[4]));
         }
         return null;
-    }
-    
-    public static void registrarSerie(Serie s){
-        if(verificaRepetido(s.formatoArquivo(), CAMINHO_SERIES)){
-            escrever(s.formatoArquivo(), CAMINHO_SERIES);
-            return;
-        }
-        System.out.println("Esta série já existe");
     }
     
     public static Serie buscarSerie(String nome){
         String[] dados = buscarLinha(nome, CAMINHO_SERIES, "\\.");
         if(dados != null){
-            String[] splited = dados[1].split("\\,");
-            if(splited.length != 4) return null;
-            return new Serie(dados[0], splited[0], Integer.parseInt(splited[1]), Integer.parseInt(splited[2]), Integer.parseInt(splited[3]));
+            return new Serie(dados[0], dados[1], Integer.parseInt(dados[2]), Integer.parseInt(dados[3]), Integer.parseInt(dados[4]), Integer.parseInt(dados[5]));
         }
         return null;
     }
+    
+    
+    
+    public static void registrarCliente(Cliente c){
+        if(!jaExiste(c.formatoArquivo(), CAMINHO_CLIENTES)){
+            escrever(c.formatoArquivo(), CAMINHO_CLIENTES);
+            return;
+        }
+        System.out.println("Este cliente já existe");
+    }
+    
+    public static void registrarFilme(Filme f){
+        if(!jaExiste(f.formatoArquivo(), CAMINHO_FILMES)){
+            escrever(f.formatoArquivo(), CAMINHO_FILMES);
+            return;
+        }
+        Filme b = buscarFilme(f.getTitulo());
+        System.out.println("Veio aqui" + b);
+        b.incrementaQuantidade(f.getQuantidade());
+        deletarFilme(f.getTitulo());
+        escrever(b.formatoArquivo(), CAMINHO_FILMES);
+    }
+    
+    public static void registrarSerie(Serie s){
+        if(!jaExiste(s.formatoArquivo(), CAMINHO_SERIES)){
+            escrever(s.formatoArquivo(), CAMINHO_SERIES);
+            return;
+        }
+        Serie b = buscarSerie(s.getTitulo());
+        System.out.println("Quantidade b: " + b.getQuantidade() + "\nQuantidade s: " + s.getQuantidade());
+        b.incrementaQuantidade(s.getQuantidade());
+        deletarSerie(s.getTitulo());
+        System.out.println("Quantidade b: " + b.getQuantidade());
+        escrever(b.formatoArquivo(), CAMINHO_SERIES);
+    }
+    
+    public static void registrarLocacao(Locacao l){
+        
+    }
+    
+    
     
     public static void deletarCliente(Integer identificador){
         if(deletarLinha(identificador.toString(), CAMINHO_CLIENTES, "\\.")){
@@ -193,7 +227,7 @@ public class GestorArquivos {
     }
     
     public static void deletarFilme(String nome){
-       if(deletarLinha(nome, CAMINHO_FILMES, "\\.")){
+       if(deletarLinha(nome, CAMINHO_FILMES, "\\ ")){
             System.out.println("Filme deletado");
             return;
         }
@@ -208,6 +242,5 @@ public class GestorArquivos {
         System.out.println("erro ao deletar série");
     }
     
-    //Criar método para checar se o cadastro de filme, série ou cliente está sendo repetido
-    //O gerador de identificador deve salvar o último número gerado em outro arquivo para diferir o id de cada cliente
+    //O incremento da quantidade de filmes e séries está falhando 
 }
