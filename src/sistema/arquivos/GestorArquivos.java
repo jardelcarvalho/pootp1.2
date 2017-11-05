@@ -25,6 +25,10 @@ public class GestorArquivos {
     private static final String CAMINHO_SERIES = CAMINHO_RAIZ + "/series.txt";
     private static final String CAMINHO_LOCACOES = CAMINHO_RAIZ + "/locacoes.txt";
     
+    private static void print(){
+        System.out.println("DEBUG");
+    }
+    
     private static boolean deletarLinha(String identificador, String path, String regex){
         File file = new File(path);
         String[] splited = null;
@@ -138,11 +142,15 @@ public class GestorArquivos {
         try{
             FileReader f = new FileReader(path);
             BufferedReader h = new BufferedReader(f);
-            String linha = "";
+            String linha = h.readLine();
+            String[] splited = null;
             while(linha != null){
-                if(item.compareTo(linha) == 0){
-                    existe = true;
-                    break;
+                splited = linha.split("\\.");
+                for(String s : splited){
+                    if(s.compareTo(item) == 0){
+                        existe = true;
+                        break;
+                    }
                 }
                 linha = h.readLine();
             }
@@ -162,9 +170,9 @@ public class GestorArquivos {
     }
     
     public static Filme buscarFilme(String nome){
-        String[] dados = buscarLinha(nome, CAMINHO_FILMES, "\\ ");
+        String[] dados = buscarLinha(nome, CAMINHO_FILMES, "\\.");
         if(dados != null){
-            return new Filme(dados[0], dados[1], Integer.parseInt(dados[2]), Integer.parseInt(dados[3]), Integer.parseInt(dados[4]));
+            return new Filme(dados[0], dados[1], Integer.parseInt(dados[2]), Integer.parseInt(dados[4]), Integer.parseInt(dados[3]));
         }
         return null;
     }
@@ -172,15 +180,16 @@ public class GestorArquivos {
     public static Serie buscarSerie(String nome){
         String[] dados = buscarLinha(nome, CAMINHO_SERIES, "\\.");
         if(dados != null){
-            return new Serie(dados[0], dados[1], Integer.parseInt(dados[2]), Integer.parseInt(dados[3]), Integer.parseInt(dados[4]), Integer.parseInt(dados[5]));
+            return new Serie(dados[0], dados[1], Integer.parseInt(dados[2]), Integer.parseInt(dados[4]), Integer.parseInt(dados[5]), Integer.parseInt(dados[3]));
         }
         return null;
     }
+
     
     
-    
+    //Funções administrativas
     public static void registrarCliente(Cliente c){
-        if(!jaExiste(c.formatoArquivo(), CAMINHO_CLIENTES)){
+        if(!jaExiste(Integer.toString(c.getCodigo()), CAMINHO_CLIENTES)){
             escrever(c.formatoArquivo(), CAMINHO_CLIENTES);
             return;
         }
@@ -188,27 +197,24 @@ public class GestorArquivos {
     }
     
     public static void registrarFilme(Filme f){
-        if(!jaExiste(f.formatoArquivo(), CAMINHO_FILMES)){
+        if(!jaExiste(f.getTitulo(), CAMINHO_FILMES)){
             escrever(f.formatoArquivo(), CAMINHO_FILMES);
             return;
         }
         Filme b = buscarFilme(f.getTitulo());
-        System.out.println("Veio aqui" + b);
         b.incrementaQuantidade(f.getQuantidade());
         deletarFilme(f.getTitulo());
         escrever(b.formatoArquivo(), CAMINHO_FILMES);
     }
     
     public static void registrarSerie(Serie s){
-        if(!jaExiste(s.formatoArquivo(), CAMINHO_SERIES)){
+        if(!jaExiste(s.getTitulo(), CAMINHO_SERIES)){
             escrever(s.formatoArquivo(), CAMINHO_SERIES);
             return;
         }
         Serie b = buscarSerie(s.getTitulo());
-        System.out.println("Quantidade b: " + b.getQuantidade() + "\nQuantidade s: " + s.getQuantidade());
         b.incrementaQuantidade(s.getQuantidade());
         deletarSerie(s.getTitulo());
-        System.out.println("Quantidade b: " + b.getQuantidade());
         escrever(b.formatoArquivo(), CAMINHO_SERIES);
     }
     
@@ -216,31 +222,43 @@ public class GestorArquivos {
         
     }
     
-    
-    
     public static void deletarCliente(Integer identificador){
-        if(deletarLinha(identificador.toString(), CAMINHO_CLIENTES, "\\.")){
-            System.out.println("Cliente deletado");
-            return;
-        }
-        System.out.println("erro ao deletar cliente");
+        deletarLinha(identificador.toString(), CAMINHO_CLIENTES, "\\.");
     }
     
     public static void deletarFilme(String nome){
-       if(deletarLinha(nome, CAMINHO_FILMES, "\\ ")){
-            System.out.println("Filme deletado");
-            return;
-        }
-        System.out.println("erro ao deletar filme");
+        Filme b = buscarFilme(nome);
+        if(b == null) return;
+        b.decrementaQuantidade();
+        deletarLinha(nome, CAMINHO_FILMES, "\\.");
+        escrever(b.formatoArquivo(), CAMINHO_FILMES);
     }
     
     public static void deletarSerie(String nome){
-        if(deletarLinha(nome, CAMINHO_SERIES, "\\.")){
-                System.out.println("Série deletada");
-            return;
-        }
-        System.out.println("erro ao deletar série");
+        Serie b = buscarSerie(nome);
+        if(b == null) return;
+        b.decrementaQuantidade();
+        deletarLinha(nome, CAMINHO_SERIES, "\\.");
+        escrever(b.formatoArquivo(), CAMINHO_SERIES);
     }
     
-    //O incremento da quantidade de filmes e séries está falhando 
+    
+    //Funções para os serviços
+    public static boolean filmeDisponivel(String nome, int qtd){
+        Filme f = buscarFilme(nome);
+        if(f != null && f.getQuantidade() >= qtd && qtd != 0)
+            return true;
+        return false;
+    }
+    
+    public static boolean serieDisponivel(String nome, int qtd){
+        Serie s = buscarSerie(nome);
+        if(s != null && s.getQuantidade() >= qtd && qtd != 0)
+            return true;
+        return false;
+    }
+    
+    public static void locacao(){
+        
+    }
 }

@@ -52,10 +52,10 @@ public class Atracao implements Formato{
         quantidade+=i;
     }
     
-    public void decrementaQuantidade(int i){
+    public void decrementaQuantidade(){
         if(quantidade == 0)
             return;
-        quantidade-=i;
+        quantidade--;
     } 
     
     @Override

@@ -20,8 +20,6 @@ public class Sistema {
         Filme f;
         Serie s;
         
-        GestorArquivos.registrarFilme(new Filme("O filme", "Guerra", 18, 124, 1));
-        
         while(true){
             opt = Interface.showMenu(Interface.opt_MenuRaiz);
             switch(opt){
