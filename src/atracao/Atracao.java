@@ -4,25 +4,24 @@
  * and open the template in the editor.
  */
 package atracao;
+import java.io.Serializable;
 import sistema.arquivos.Formato;
 
 /**
  *
  * @author davi
  */
-public class Atracao implements Formato{
+public class Atracao implements Formato, Comparable<Atracao>, Serializable{
     
     private String titulo;
     private String genero;
     private int classIndicativa;
-    private int quantidade;
     
-    public Atracao(String titulo, String genero, int classIndicativa, int quantidade){
+    public Atracao(String titulo, String genero, int classIndicativa){
     
         this.titulo = titulo;
         this.genero = genero;
         this.classIndicativa = classIndicativa;
-        this.quantidade = quantidade;
         
     }
     
@@ -44,24 +43,10 @@ public class Atracao implements Formato{
         
     }
     
-    public int getQuantidade(){
-        return quantidade;
-    }
-    
-    public void incrementaQuantidade(int i){
-        quantidade+=i;
-    }
-    
-    public void decrementaQuantidade(){
-        if(quantidade == 0)
-            return;
-        quantidade--;
-    } 
-    
     @Override
     public String toString(){
     
-        return "Título: " + titulo + "\nGênero: " + genero + "\nClassificação Indicativa: " + classIndicativa + "\nQuantidade: " + quantidade;
+        return "Título: " + titulo + "\n        Gênero: " + genero + "\n        Classificação Indicativa: " + classIndicativa;
         
     }
     
@@ -73,7 +58,14 @@ public class Atracao implements Formato{
     
     @Override
     public String formatoArquivo(){
-        return titulo + '.' + genero + '.' + classIndicativa + '.' + quantidade;
+        return titulo + ".txt";
+    }
+    
+    @Override
+    public int compareTo(Atracao atracao){
+        if(titulo.compareTo(atracao.titulo) == 0)
+            return 0;
+        return -1;
     }
     
 }

@@ -4,15 +4,16 @@
  * and open the template in the editor.
  */
 package cliente;
+import java.io.Serializable;
 import sistema.arquivos.Formato;
 
 /**
  *
  * @author jardel
  */
-public class Cliente implements Formato{
+public class Cliente implements Formato, Comparable<Cliente>, Serializable{
     private String nome;
-    private int codigo;
+    private Integer codigo;
     
     public Cliente(String nome, int codigo){
         this.nome = nome;
@@ -27,17 +28,25 @@ public class Cliente implements Formato{
         return codigo;
     }
     
-    public boolean identificacao(int codigo){
-        return codigo == this.codigo;
+    public void info(){
+        System.out.println(toString());
     }
     
     @Override
     public String toString(){
-        return "Nome: " + nome + "\nId. Local: " + codigo;
+        return "        Nome: " + nome + "\n        Id. Local: " + codigo;
     }
     
     @Override
     public String formatoArquivo(){
-        return nome + '.' + codigo;
+        return codigo + ".txt";
+    }
+    
+    @Override
+    public int compareTo(Cliente cliente){
+        System.out.print("Veio aqui");
+        if(codigo == cliente.getCodigo())
+            return 0;
+        return -1;
     }
 }

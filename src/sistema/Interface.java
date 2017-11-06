@@ -13,10 +13,17 @@ import java.util.Scanner;
 
 class Interface {
     public static final String[] opt_MenuRaiz = {"Sair", "Cliente", "Serviço"};
-    public static final String[] opt_Cliente = {"Sair", "Cadastrar", "Remover", "Alterar", "Consultar", "Alugar ", "Devolver"};
-    public static final String[] opt_Servico = {"Sair", "Cadastrar", "Remover", "Alterar", "Consultar"};
-    public static final String[] OPT_T_SERVICO = {"Filme", "Serie"};
+    public static final String[] opt_Cliente = {"Sair", "Cadastrar", "Remover", "Consultar", "Alugar ", "Devolver"};
+    public static final String[] opt_Servico = {"Sair", "Cadastrar", "Remover", "Consultar"};
+    public static final String[] OPT_T_SERVICO = {"Sair", "Filme", "Serie"};
+    public static final String[] OPT_BINARIA = {"Sim", "Não"};
+    public static final String[] OPT_CONSULTA = {"Sair", "Cliente", "Servico", "Locação"};
     private static final Scanner sc = new Scanner(System.in);
+    
+    
+    public static void show(String s){
+        System.out.println(s);
+    }
     
     public static int showMenu(String[] menu){
         int opt = -1;
@@ -30,6 +37,22 @@ class Interface {
         return opt;
     }
     
+    public static int getInt(){
+        while(!sc.hasNextInt()){
+            show("Valor inteiro inválido!");
+            sc.next();
+        }
+        return sc.nextInt();
+    }
+    
+    public static String getString(String s){
+        System.out.print(s + ": ");
+        //
+        while(sc.hasNextDouble() || sc.hasNextFloat() || sc.hasNextInt())
+            sc.next();
+        return sc.next().toUpperCase();
+    }
+    
     public static String getString(){
         System.out.print("Nome: ");
         //
@@ -40,7 +63,7 @@ class Interface {
     
     public static int getId(){
         String getId = "";
-        System.out.print("Id. Local: ");
+        System.out.print("Id. Local do cliente: ");
         while(!getId.matches("\\d\\d\\d")){
             getId = sc.next();
         }

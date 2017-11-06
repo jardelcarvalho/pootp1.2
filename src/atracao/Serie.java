@@ -4,19 +4,20 @@
  * and open the template in the editor.
  */
 package atracao;
+import java.io.Serializable;
 import sistema.arquivos.Formato;
 /**
  *
  * @author davi
  */
-public class Serie extends Atracao implements Formato{
+public class Serie extends Atracao implements Serializable{
     
     private int numEp;/*número de episódios*/
     private int numTemp;/*número de temporadas*/
     
-    public Serie(String titulo, String genero, int classIndicativa, int numEp, int numTemp, int quantidade){
+    public Serie(String titulo, String genero, int classIndicativa, int numEp, int numTemp){
     
-        super(titulo, genero, classIndicativa, quantidade);
+        super(titulo, genero, classIndicativa);
         this.numEp = numEp;
         this.numTemp = numTemp;
         
@@ -37,7 +38,7 @@ public class Serie extends Atracao implements Formato{
     @Override
     public String toString(){
     
-        return super.toString() + "\nNúmero de Episódios: " + numEp + "\nNúmero de Temporadas: " + numTemp;
+        return super.toString() + "\n        Número de Episódios: " + numEp + "\n        Número de Temporadas: " + numTemp;
         
     }
     
@@ -46,11 +47,6 @@ public class Serie extends Atracao implements Formato{
     
         System.out.println(toString());
         
-    }
-    
-    @Override 
-    public String formatoArquivo(){
-        return super.formatoArquivo() + '.' + numEp + '.' + numTemp;
     }
     
 }

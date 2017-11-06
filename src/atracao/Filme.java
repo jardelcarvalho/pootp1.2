@@ -4,19 +4,20 @@
  * and open the template in the editor.
  */
 package atracao;
+import java.io.Serializable;
 import sistema.arquivos.Formato;
 
 /**
  *
  * @author davi
  */
-public class Filme extends Atracao implements Formato{
+public class Filme extends Atracao implements Serializable{
     
     private int tempDura;/*tempo de duração*/
     
-    public Filme(String titulo, String genero, int classIndicativa, int tempDura, int quantidade){
+    public Filme(String titulo, String genero, int classIndicativa, int tempDura){
     
-        super(titulo, genero, classIndicativa, quantidade);
+        super(titulo, genero, classIndicativa);
         this.tempDura = tempDura;
         
     }
@@ -30,7 +31,8 @@ public class Filme extends Atracao implements Formato{
     @Override
     public String toString(){
     
-        return super.toString() + "\nTempo de Duração: " + tempDura;
+        return super.toString() + "\n       Tempo de Duração: " + tempDura;
+                
         
     }
     
@@ -39,11 +41,6 @@ public class Filme extends Atracao implements Formato{
     
         System.out.println(toString());
         
-    }
-    
-    @Override
-    public String formatoArquivo(){
-        return super.formatoArquivo() + '.' + tempDura;
     }
     
 }
